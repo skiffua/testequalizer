@@ -1,24 +1,15 @@
 import React from 'react';
 import Equaliser from './equalizer'
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
-import { dirname } from 'path';
+// import { dirname } from 'path';
 import sound from './jack.mp3'
 
 
 class App extends React.Component {
   componentDidMount(){
-
    
-    this.start(); 
-    var clickElem = document.querySelector("button");
-    console.log(clickElem)
-    clickElem.addEventListener('click', function() {
-      clickElem.style.display = 'none';
-      
-    });
-  }
-  start=()=> {
+    function start(){
     var context = new (window.AudioContext || window.webkitAudioContext)();
     var analyser = context.createAnalyser();
   
@@ -36,8 +27,7 @@ class App extends React.Component {
       for (var x =0; x < width; x += 10) {
          var ndx = x * numPoints / width | 0;
          var vol = heightArray[ndx];
-         var y = vol * height / 255;
-    
+         var y = vol * height / 255;    
         //  ctx.fillStyle = flagColorColumn ? '#1ecea8' : '#93969f';
         //  flagColorColumn =!flagColorColumn;
           
@@ -69,10 +59,9 @@ class App extends React.Component {
       ctx.fill();
       ctx.strokeStyle = 'orange';
       ctx.stroke();
-    }
-
-
-    // Make a audio node
+    }  
+  
+     // Make a audio node
     var audio = new Audio();
     audio.loop = true;
     audio.autoplay = true;
@@ -84,21 +73,23 @@ class App extends React.Component {
         source.connect(analyser);
         analyser.connect(context.destination);
       } catch (e) {
-        log(e.toString());
+        console.log(e.toString());
       }
     });
     audio.addEventListener('error', function(e) {
-      log(e.toString());
+      console.log(e.toString());
     });
     audio.src = sound
-    audio.play();
-  
-    function log() {
-      var elem = document.createElement("div");
-      elem.textContent = Array.prototype.join.call(arguments, ' ');
-      document.body.appendChild(elem);
-    }
+    audio.play();    
   }
+  var clickElem = document.querySelector("button");
+    // console.log(clickElem)
+    clickElem.addEventListener('click', function() {
+      clickElem.style.display = 'none';
+      start();
+    });
+  }
+
   render(){
   return (
     <div className="App">
