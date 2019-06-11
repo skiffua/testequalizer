@@ -8,7 +8,7 @@ import sound from './jack.mp3'
 
 class App extends React.Component {
   componentDidMount(){
-   
+    
     function start(){
     var context = new (window.AudioContext || window.webkitAudioContext)();
     var analyser = context.createAnalyser();
@@ -31,11 +31,12 @@ class App extends React.Component {
         //  ctx.fillStyle = flagColorColumn ? '#1ecea8' : '#93969f';
         //  flagColorColumn =!flagColorColumn;
           
-         roundedRect(ctx, x, height/2, 10, y+3, 3)
-        //  roundedRect(ctx, x, height/2, 10, -y, 3)
+        //  roundedRect(ctx, x, height/2, 10, y, 3)
+         roundedRect(ctx, x, height/2, 10, y, 3)
 
         //  ctx.fillRect(x, height/2, 10, y);
         //  ctx.fillRect(x, height/2, 10, -y);
+      
       }    
       requestAnimationFrame(render);
     }
@@ -46,12 +47,15 @@ class App extends React.Component {
       ctx.strokeStyle = 'orange';
      
       context.lineWidth = 1;     
-      ctx.moveTo(x, y);
-      ctx.lineTo(x, y + height - radius);
+      ctx.moveTo(x, y-height);
+      ctx.lineTo(x, y +height - radius);
       ctx.arcTo(x, y + height, x + radius, y + height, radius);
       ctx.lineTo(x + width - radius, y + height);
       ctx.arcTo(x + width, y + height, x + width, y + height-radius, radius);
-      ctx.lineTo(x + width, y);
+      ctx.lineTo(x + width, y-height+radius);
+      ctx.arcTo(x + width, y-height, x+width-radius, y - height, radius);
+      ctx.lineTo(x +radius, y-height);
+      ctx.arcTo(x, y - height, x, y - height+radius, radius);
       // ctx.lineTo(x + radius, y);
       // /actx.closePath();
       ctx.fillStyle =flagColorColumn ? '#1ecea8' : '#93969f';
