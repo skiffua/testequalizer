@@ -6,8 +6,9 @@ function equlizer(props){
         <div>
             <h1>Equalizer Nice</h1>
             <button>
-             Click to Start
+             Play
             </button>
+            <br />
             <canvas id="graphicequalizer" width={props.width} height={props.height} src={props.src}
                     style={{borderColor: "green", borderWidth: "2px", borderStyle: "solid"}}
             > </canvas> 
