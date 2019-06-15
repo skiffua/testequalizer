@@ -1,13 +1,26 @@
 import React from 'react'
 import getinfoaboutfile from './infoaboutfile/getinfoaboutfile'
+import {connect} from 'react-redux'
 
 
-function Uploadbutton (){
+function Uploadbutton (props){
+    console.log(props)
     return(
         <label > Виберіть трек для завантаження 
-        <input type="file" id="soundsource" accept="audio/mp3" onChange={getinfoaboutfile} />
+        <input type="file" id="soundsource" accept="audio/mp3" onChange={props.uploadsoundinfo} />
         </label>
     )
 }
 
-export default Uploadbutton
+function mapstate(state){
+    return state
+  }
+
+function storedispatch(dispatch){
+    return {
+        uploadsoundinfo: (e)=>dispatch({type: 'uploasoundinfo', payload: e.target.files[0]})
+
+    }
+  }  
+
+export default connect(mapstate, storedispatch)(Uploadbutton);

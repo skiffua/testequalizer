@@ -1,3 +1,5 @@
+
+
 function getinfoaboutfile(e){
     var detailsblock=document.getElementById("detailstrack")
     console.log(this)
@@ -6,7 +8,8 @@ function getinfoaboutfile(e){
         type: e.target.files[0].type,
         size: e.target.files[0].size
     }
-
 }
+
+
 
 export default getinfoaboutfile;
