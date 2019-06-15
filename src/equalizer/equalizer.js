@@ -1,13 +1,12 @@
 import React from 'react';
+import PlayButton from './playbutton'
 
 
 function equlizer(props){
     return(
         <div>
             <h1>Equalizer Nice</h1>
-            <button>
-             Play
-            </button>
+            <PlayButton />
             <br />
             <canvas id="graphicequalizer" width={props.width} height={props.height} src={props.src}
                     style={{borderColor: "green", borderWidth: "2px", borderStyle: "solid"}}

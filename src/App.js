@@ -17,7 +17,7 @@ class App extends React.Component {
     
   };
   widthMerge=(e)=>{
-    console.log(this.state) 
+    console.log('old state',this.state) 
     this.setState({widthCanvas: e.target.value})
   }     
   

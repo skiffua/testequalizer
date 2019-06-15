@@ -18,7 +18,7 @@ function mapstate(state){
 
 function storedispatch(dispatch){
     return {
-        uploadsoundinfo: (e)=>dispatch({type: 'uploasoundinfo', payload: e.target.files[0]})
+        uploadsoundinfo: (e)=>dispatch({type: 'uploadsoundinfo', payload: e.target.files[0]})
 
     }
   }  
