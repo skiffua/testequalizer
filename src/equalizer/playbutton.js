@@ -2,10 +2,8 @@ import React from 'react'
 import {connect} from 'react-redux'
 
 function PlayButton(props){
-    props.test();
-
     return(
-        <button onClick={props.playsoundfromfile}>
+        <button onClick={props.hadlesound.bind(this)}>
              Play
         </button>
     )
@@ -17,8 +15,9 @@ function mapstate(state){
 
 function storedispatch(dispatch){
     return {
-        playsoundfromfile: ()=>dispatch({type: 'playsoundfromfile'}),
-        test: ()=>dispatch({type: 'consolee'})
+        creataudiocontext: ()=>dispatch({type: 'creataudiocontext'}),
+        createanaliser: ()=>dispatch({type: 'createanaliser'}),
+        createaudionodefromfile: ()=>dispatch({type: 'createaudionodefromfile'})
     }
   }  
 

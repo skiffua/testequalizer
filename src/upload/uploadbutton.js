@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 
 
 function Uploadbutton (props){
-    console.log(props)
+    
     return(
         <label > Виберіть трек для завантаження 
         <input type="file" id="soundsource" accept="audio/mp3" onChange={props.uploadsoundinfo} />
@@ -19,7 +19,6 @@ function mapstate(state){
 function storedispatch(dispatch){
     return {
         uploadsoundinfo: (e)=>dispatch({type: 'uploadsoundinfo', payload: e.target.files[0]})
-
     }
   }  
 

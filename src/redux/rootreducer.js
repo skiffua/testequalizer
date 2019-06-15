@@ -9,18 +9,17 @@ const initialState={
      audiocontext: "",
      analyser: "",
      audiofromfile: "",
-     audiocontext: "",
-     createanaliser: "",
-     createaudionodefromfile: ""
+    //  audiocontext: "",
+    //  createanaliser: "",
+    //  createaudionodefromfile: ""
 
 }
 
 
 export default function rootReducer(state=initialState, action){
     
-    console.log('action',action)
     switch(action.type){
-        case 'uploadsoundinfo': {            
+        case 'uploadsoundinfo':             
             return {
                 ...state,
                 trackname: action.payload.name,
@@ -28,32 +27,22 @@ export default function rootReducer(state=initialState, action){
                 tracksize: action.payload.size,
                 soundSrc: action.payload
                     }
-        };
-        case 'creataudiocontext':{
-            var context = new (window.AudioContext || window.webkitAudioContext)();   
+        
+        case 'creataudiocontext':               
             return {
                 ...state,
-                audiocontext: context
-            }
-
-        };
-        case 'createanaliser':{            
+                audiocontext: action.payload   
+        }
+        case 'createanaliser':            
             return {
                 ...state,
-                createanaliser: createanaliser
+                analyser: action.payload
             }
-
-        };
-        case 'createaudionodefromfile':{            
+        case 'createaudionodefromfile':            
             return {
                 ...state,
-                createaudionodefromfile: createaudionodefromfile
-            }
-
-        };
-
-
-
+                audiofromfile: action.payload
+            };
 
         default: return state
     }    
