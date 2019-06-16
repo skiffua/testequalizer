@@ -1,17 +1,18 @@
 
 
 const initialState={  
-     widthCanvas: 400,     
+     widthCanvas: 400,
+     
+     
+     //audiostates
      trackname: "",     
      tracktype: "",
-     tracksize: "", 
-     soundSrc: "",
+     tracksize: "",     
      audiocontext: "",
      analyser: "",
      audiofromfile: "",
-    //  audiocontext: "",
-    //  createanaliser: "",
-    //  createaudionodefromfile: ""
+     audionodefromfile: "",
+     playpausestate: false
 
 }
 
@@ -19,31 +20,29 @@ const initialState={
 export default function rootReducer(state=initialState, action){
     
     switch(action.type){
-        case 'uploadsoundinfo':             
+        case 'createaudiodata':
+                         
             return {
                 ...state,
                 trackname: action.payload.name,
                 tracktype: action.payload.type,
                 tracksize: action.payload.size,
-                soundSrc: action.payload
-                    }
-        
-        case 'creataudiocontext':               
+                // soundSrc: action.payload.file,
+                audiocontext: action.payload.context,
+                analyser: action.payload.analyser,
+                audiofromfile: action.payload.file,
+                audionodefromfile: action.payload.audio
+                    } 
+        case 'playpausesoundfromfile':
             return {
                 ...state,
-                audiocontext: action.payload   
-        }
-        case 'createanaliser':            
+                playpausestate: !(state.playpausestate)
+            }  
+            case 'mergecanvaswidth':
             return {
                 ...state,
-                analyser: action.payload
-            }
-        case 'createaudionodefromfile':            
-            return {
-                ...state,
-                audiofromfile: action.payload
-            };
-
+                widthCanvas: action.payload
+            }          
         default: return state
     }    
 }

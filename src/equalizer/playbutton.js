@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 
 function PlayButton(props){
     return(
-        <button onClick={props.hadlesound.bind(this)}>
+        <button onClick={props.hadlesound}>
              Play
         </button>
     )

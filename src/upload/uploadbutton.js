@@ -7,7 +7,7 @@ function Uploadbutton (props){
     
     return(
         <label > Виберіть трек для завантаження 
-        <input type="file" id="soundsource" accept="audio/mp3" onChange={props.uploadsoundinfo} />
+        <input type="file" id="soundsource" accept="audio/mp3" onChange={props.handleinfofromsound} />
         </label>
     )
 }
