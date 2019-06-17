@@ -10,7 +10,11 @@ import './App.css';
 
 
 class App extends React.Component {  
- 
+  
+  componentWillMount(){
+    this.createbaseaudiocontextandanaliser()
+  }
+
   componentDidMount(){  
     var audioCtx = new (window.AudioContext || window.webkitAudioContext)();    
     var audio = new Audio(); 
@@ -124,13 +128,15 @@ class App extends React.Component {
   }
 
   createbaseaudiocontextandanaliser(){
-
+    var context = new (window.AudioContext || window.webkitAudioContext)();    
+    var analyser = context.createAnalyser();
+    this.props.baseaudiocontextandanaliser({context,analyser})
   }
 
   uploadsoundinfofromfile=(e)=>{  
-    const file=e.target.files[0]    
-    var context = new (window.AudioContext || window.webkitAudioContext)();    
-    var analyser = context.createAnalyser();
+    const file=e.target.files[0]
+    var context=this.props.audiocontext;
+    var analyser=this.props.analyser;    
     var audio = new Audio();   
         audio.loop = true;       
         audio.crossOrigin = "anonymous";
@@ -147,7 +153,7 @@ class App extends React.Component {
           console.log(e.toString(),'ERORA');
         });
         audio.src = URL.createObjectURL(file)
-        this.props.createaudiodata({context,analyser,audio,file,name:file.name,size: file.size, type:file.type})   
+        this.props.createaudiodata({audio,file,name:file.name,size: file.size, type:file.type})   
       }
   
 
@@ -168,6 +174,7 @@ function mapstate(state){
 }
 function storedispatch(dispatch){
   return {
+      baseaudiocontextandanaliser: (data)=>dispatch({type: 'baseaudiocontextandanaliser', payload: data}),
       createaudiodata: (data)=>dispatch({type: 'createaudiodata', payload: data}),  
       playpausesoundfromfile: ()=>dispatch({type: 'playpausesoundfromfile'}),
       mergecanvaswidth: (e)=>dispatch({type:'mergecanvaswidth', payload: e.target.value})   

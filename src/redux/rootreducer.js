@@ -20,16 +20,20 @@ const initialState={
 export default function rootReducer(state=initialState, action){
     
     switch(action.type){
-        case 'createaudiodata':
+        case 'baseaudiocontextandanaliser':
                          
+            return {
+                ...state,
+                audiocontext: action.payload.context,
+                analyser: action.payload.analyser,
+                    } 
+        case 'createaudiodata':                         
             return {
                 ...state,
                 trackname: action.payload.name,
                 tracktype: action.payload.type,
                 tracksize: action.payload.size,
-                // soundSrc: action.payload.file,
-                audiocontext: action.payload.context,
-                analyser: action.payload.analyser,
+                // soundSrc: action.payload.file,                
                 audiofromfile: action.payload.file,
                 audionodefromfile: action.payload.audio
                     } 
