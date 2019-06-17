@@ -6,16 +6,61 @@ import {connect} from 'react-redux'
 
 // import logo from './logo.svg';
 import './App.css';
-// import { dirname } from 'path';
-import sound from './jack.mp3'
 
 
-class App extends React.Component {
-   
+
+class App extends React.Component {  
  
-  componentDidMount(){   
+  componentDidMount(){  
+    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();    
+    var audio = new Audio(); 
+
+    if (navigator.mediaDevices) {
+      console.log('getUserMedia supported.');
+      navigator.mediaDevices.getUserMedia ({audio: true, video: false})
+      
+      .then(function(stream) {
+        console.log('has permission')
+          audio.srcObject = stream;
+          audio.onloadedmetadata = function(e) {
+              console.log(audio.data)
+              audio.play();
+              // video.muted = true;
+          };
+  
+          // Create a MediaStreamAudioSourceNode
+          // Feed the HTMLMediaElement into it
+          // var audioCtx = new AudioContext();
+          var source = audioCtx.createMediaStreamSource(stream);
+  
+          // Create a biquadfilter
+          // var biquadFilter = audioCtx.createBiquadFilter();
+          // biquadFilter.type = "lowshelf";
+          // biquadFilter.frequency.value = 1000;
+          // biquadFilter.gain.value = range.value;
+  
+          // connect the AudioBufferSourceNode to the gainNode
+          // and the gainNode to the destination, so we can play the
+          // music and adjust the volume using the mouse cursor
+          // source.connect(biquadFilter);
+          // biquadFilter.connect(audioCtx.destination);
+  
+          // Get new mouse pointer coordinates when mouse is moved
+          // then set new gain value
+  
+          // range.oninput = function() {
+          //     biquadFilter.gain.value = range.value;
+          // }
+      })
+      .catch(function(err) {
+          console.log('The following gUM error occured: ' + err);
+      });
+  } else {
+     console.log('getUserMedia not supported on your browser!');
+  }
+    }
     
-  };
+
   widthMerge=(e)=>{
     console.log('old state',this.state) 
     this.props.mergecanvaswidth(e)
@@ -34,6 +79,7 @@ class App extends React.Component {
       soundfromfile.pause();
       this.props.playpausesoundfromfile();
   }}
+
   equaliserrun(){
     var ctx = document.querySelector("canvas").getContext("2d");
     var flagColorColumn=true;
@@ -75,6 +121,10 @@ class App extends React.Component {
       ctx.fill();      
     } 
     
+  }
+
+  createbaseaudiocontextandanaliser(){
+
   }
 
   uploadsoundinfofromfile=(e)=>{  

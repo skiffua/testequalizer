@@ -13,12 +13,4 @@ function mapstate(state){
     return state
   }
 
-function storedispatch(dispatch){
-    return {
-        creataudiocontext: ()=>dispatch({type: 'creataudiocontext'}),
-        createanaliser: ()=>dispatch({type: 'createanaliser'}),
-        createaudionodefromfile: ()=>dispatch({type: 'createaudionodefromfile'})
-    }
-  }  
-
-export default connect(mapstate, storedispatch)(PlayButton)
+export default connect(mapstate)(PlayButton)
