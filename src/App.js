@@ -2,6 +2,7 @@ import React from 'react';
 import Equaliser from './equalizer/equalizer'
 import Uploadbutton from './upload/uploadbutton'
 import Infoabouttrack from './upload/infoaboutfile/infoaboutuploadfile'
+import Streambutton from './streambutton/streambutton'
 import {connect} from 'react-redux'
 
 // import logo from './logo.svg';
@@ -45,15 +46,16 @@ class App extends React.Component {
             console.log('stopped_speaking');
           });
 
-          audiolinein.onloadedmetadata = function(e) {              
-              audiolinein.play();              
-          };
+          // audiolinein.onloadedmetadata = function(e) {              
+          //     audiolinein.play();              
+          // };
           var source = context.createMediaStreamSource(stream);
           
           source.connect(analyser);
           analyser.connect(context.destination);
           
-          this.equaliserrun()           
+          // this.equaliserrun() 
+          this.props.createstreamdata(audiolinein)          
       })
       .catch(function(err) {
           console.log('The following gUM error occured: ' + err);
@@ -61,6 +63,7 @@ class App extends React.Component {
   } else {
      console.log('getUserMedia not supported on your browser!');
   }
+  console.log('')
     }
     
   createbaseaudiocontextandanaliser=()=>{
@@ -84,9 +87,25 @@ class App extends React.Component {
       this.props.playpausesoundfromfile();
   }}
 
+  startmutestream =()=>{    
+    var stream=this.props.audiostream;   
+    if (this.props.startmutesstate==false) {  
+      console.log('start!')   
+      stream.play();
+      this.equaliserrun()
+      this.props.startmutestreamaudio()
+    } else {      
+      console.log('pause!')
+      stream.pause();
+      this.props.startmutestreamaudio();
+  }
+  }
+
   equaliserrun=(e)=>{
    
     var ctx = document.querySelector("canvas").getContext("2d");
+
+    // var ctx=this.props.graphiccontext;
     var flagColorColumn=true;
     var analyser=this.props.analyser
     
@@ -157,9 +176,10 @@ class App extends React.Component {
   
 
   render(){   
-    console.log('render') 
+    console.log('render')   
   return (    
-    <div className="App">
+    <div className="App">      
+      <Streambutton onclickhandler={this.startmutestream} />
       <Equaliser width={this.props.widthCanvas} height="200" onchange={this.widthMerge} hadlesound={this.playsoundfromfile}/>
       <Uploadbutton handleinfofromsound={this.uploadsoundinfofromfile}/>
       <Infoabouttrack trackname={this.props.trackname} tracksize={this.props.tracksize} tracktype={this.props.tracktype} />
@@ -175,6 +195,8 @@ function storedispatch(dispatch){
       baseaudiocontextandanaliser: (data)=>dispatch({type: 'baseaudiocontextandanaliser', payload: data}),
       createaudiodata: (data)=>dispatch({type: 'createaudiodata', payload: data}),  
       playpausesoundfromfile: ()=>dispatch({type: 'playpausesoundfromfile'}),
+      createstreamdata: (data)=>dispatch({type: 'createstreamdata', payload: data}),
+      startmutestreamaudio: ()=>dispatch({type: 'startmutestteam'}),
       mergecanvaswidth: (e)=>dispatch({type:'mergecanvaswidth', payload: e.target.value})   
   }
 }  

@@ -1,10 +1,12 @@
 var context = new (window.AudioContext || window.webkitAudioContext)();    
 var analyser = context.createAnalyser();
 
+// var ctx = document.querySelector("canvas").getContext("2d");
+
 const initialState={  
     //graphic canvas 
     widthCanvas: 400,
-     
+    // graphiccontext: ctx, 
      
      //audiostates
      trackname: "",     
@@ -15,7 +17,8 @@ const initialState={
      audiofromfile: "",
      audiostream: "",
      audionodefromfile: "",
-     playpausestate: false
+     playpausestate: false,
+     startmutesstate: false
 
 }
 
@@ -45,8 +48,18 @@ export default function rootReducer(state=initialState, action){
             return {
                 ...state,
                 playpausestate: !(state.playpausestate)
-            }  
-            case 'mergecanvaswidth':
+            }
+        case 'createstreamdata':
+            return {
+                ...state,
+                audiostream: action.payload
+                }      
+        case 'startmutestteam':
+                return {
+                    ...state,
+                    startmutesstate: !(state.startmutesstate)
+                }    
+        case 'mergecanvaswidth':
             return {
                 ...state,
                 widthCanvas: action.payload
