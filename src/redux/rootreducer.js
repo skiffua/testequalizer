@@ -2,7 +2,8 @@ var context = new (window.AudioContext || window.webkitAudioContext)();
 var analyser = context.createAnalyser();
 
 const initialState={  
-     widthCanvas: 400,
+    //graphic canvas 
+    widthCanvas: 400,
      
      
      //audiostates
@@ -21,13 +22,14 @@ const initialState={
 export default function rootReducer(state=initialState, action){
     
     switch(action.type){
-        // case 'baseaudiocontextandanaliser':
+        case 'baseaudiocontextandanaliser':
                          
-        //     return {
-        //         ...state,
-        //         audiocontext: action.payload.context,
-        //         analyser: action.payload.analyser
-        //             } 
+            return {
+                ...state,
+                audiocontext: action.payload.context,
+                analyser: action.payload.analyser,
+                trackname: "sound track"
+                    } 
         case 'createaudiodata':                         
             return {
                 ...state,

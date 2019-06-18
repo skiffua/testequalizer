@@ -17,14 +17,15 @@ class App extends React.Component {
  
 
   componentWillMount(){
-    console.log('1')
-    // this.createbaseaudiocontextandanaliser()
-    console.log('componentWillMount', this.props)  
+    //  this.createbaseaudiocontextandanaliser()
   }
+
+  
 
   componentDidMount(){ 
     
     var context = this.props.audiocontext;
+    console.log('componentDidMount state',this.props)
     var analyser=this.props.analyser; 
        
     var audiolinein = new Audio(); 
@@ -88,7 +89,12 @@ class App extends React.Component {
   }
     }
     
-
+  createbaseaudiocontextandanaliser=()=>{
+    var context = new (window.AudioContext || window.webkitAudioContext)();    
+    var analyser = context.createAnalyser();
+    this.props.baseaudiocontextandanaliser({context,analyser})
+  }
+  
   widthMerge=(e)=>{   
     this.props.mergecanvaswidth(e)
   }     
@@ -109,6 +115,7 @@ class App extends React.Component {
     var ctx = document.querySelector("canvas").getContext("2d");
     var flagColorColumn=true;
     var analyser=this.props.analyser
+    // console.log('analyser.frequencyBinCount',analyser.frequencyBinCount,'  ',analyser.fftSize)
     var numPoints = analyser.frequencyBinCount-80;
     var heightArray = new Uint8Array(numPoints);
     function render() {
@@ -149,11 +156,7 @@ class App extends React.Component {
     
   }
 
-  // createbaseaudiocontextandanaliser(){
-  //   var context = new (window.AudioContext || window.webkitAudioContext)();    
-  //   var analyser = context.createAnalyser();
-  //   this.props.baseaudiocontextandanaliser({context,analyser})
-  // }
+  
 
   uploadsoundinfofromfile=(e)=>{  
     const file=e.target.files[0]
@@ -179,7 +182,8 @@ class App extends React.Component {
       }
   
 
-  render(){    
+  render(){   
+    console.log('render') 
   return (    
     <div className="App">
       <Equaliser width={this.props.widthCanvas} height="200" onchange={this.widthMerge} hadlesound={this.playsoundfromfile}/>
@@ -194,7 +198,7 @@ function mapstate(state){
 }
 function storedispatch(dispatch){
   return {
-      // baseaudiocontextandanaliser: (data)=>dispatch({type: 'baseaudiocontextandanaliser', payload: data}),
+      baseaudiocontextandanaliser: (data)=>dispatch({type: 'baseaudiocontextandanaliser', payload: data}),
       createaudiodata: (data)=>dispatch({type: 'createaudiodata', payload: data}),  
       playpausesoundfromfile: ()=>dispatch({type: 'playpausesoundfromfile'}),
       mergecanvaswidth: (e)=>dispatch({type:'mergecanvaswidth', payload: e.target.value})   
