@@ -25,14 +25,12 @@ class App extends React.Component {
   componentDidMount(){ 
     
     var context = this.props.audiocontext;
-    console.log('componentDidMount state',this.props)
-    var analyser=this.props.analyser; 
-       
+    
+    var analyser=this.props.analyser;        
     var audiolinein = new Audio(); 
 
     if (navigator.mediaDevices) {      
-      navigator.mediaDevices.getUserMedia ({audio: true})
-      
+      navigator.mediaDevices.getUserMedia ({audio: true})      
       .then((stream)=> {   
         audiolinein.srcObject = stream;
           //hark
@@ -50,36 +48,12 @@ class App extends React.Component {
           audiolinein.onloadedmetadata = function(e) {              
               audiolinein.play();              
           };
-          // audiolinein.play();
-          // Create a MediaStreamAudioSourceNode
-          // Feed the HTMLMediaElement into it
-          // var audioCtx = new AudioContext();
-          // var audioCtx = new AudioContext();
           var source = context.createMediaStreamSource(stream);
-          // var source = context.createMediaStreamSource(stream);
-          var audiostream=source.mediastream;
+          
           source.connect(analyser);
           analyser.connect(context.destination);
           
-          this.equaliserrun()
-            // Create a biquadfilter
-          // var biquadFilter = audioCtx.createBiquadFilter();
-          // biquadFilter.type = "lowshelf";
-          // biquadFilter.frequency.value = 1000;
-          // biquadFilter.gain.value = range.value;
-  
-          // connect the AudioBufferSourceNode to the gainNode
-          // and the gainNode to the destination, so we can play the
-          // music and adjust the volume using the mouse cursor
-          // source.connect(biquadFilter);
-          // biquadFilter.connect(audioCtx.destination);
-  
-          // Get new mouse pointer coordinates when mouse is moved
-          // then set new gain value
-  
-          // range.oninput = function() {
-          //     biquadFilter.gain.value = range.value;
-          // }
+          this.equaliserrun()           
       })
       .catch(function(err) {
           console.log('The following gUM error occured: ' + err);
@@ -115,7 +89,7 @@ class App extends React.Component {
     var ctx = document.querySelector("canvas").getContext("2d");
     var flagColorColumn=true;
     var analyser=this.props.analyser
-    // console.log('analyser.frequencyBinCount',analyser.frequencyBinCount,'  ',analyser.fftSize)
+    
     var numPoints = analyser.frequencyBinCount-80;
     var heightArray = new Uint8Array(numPoints);
     function render() {

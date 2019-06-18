@@ -13,6 +13,7 @@ const initialState={
      audiocontext: context,
      analyser: analyser,
      audiofromfile: "",
+     audiostream: "",
      audionodefromfile: "",
      playpausestate: false
 
