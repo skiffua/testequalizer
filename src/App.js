@@ -7,37 +7,61 @@ import {connect} from 'react-redux'
 // import logo from './logo.svg';
 import './App.css';
 
+//hark
+import Hark from 'hark'
+
+
 
 
 class App extends React.Component {  
-  
+ 
+
   componentWillMount(){
-    this.createbaseaudiocontextandanaliser()
+    console.log('1')
+    // this.createbaseaudiocontextandanaliser()
+    console.log('componentWillMount', this.props)  
   }
 
-  componentDidMount(){  
-    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();    
-    var audio = new Audio(); 
+  componentDidMount(){ 
+    
+    var context = this.props.audiocontext;
+    var analyser=this.props.analyser; 
+       
+    var audiolinein = new Audio(); 
 
-    if (navigator.mediaDevices) {
-      console.log('getUserMedia supported.');
-      navigator.mediaDevices.getUserMedia ({audio: true, video: false})
+    if (navigator.mediaDevices) {      
+      navigator.mediaDevices.getUserMedia ({audio: true})
       
-      .then(function(stream) {
-        console.log('has permission')
-          audio.srcObject = stream;
-          audio.onloadedmetadata = function(e) {
-              console.log(audio.data)
-              audio.play();
-              // video.muted = true;
+      .then((stream)=> {   
+        audiolinein.srcObject = stream;
+          //hark
+          var options = {};
+          var speechEvents = Hark(stream, options);
+      
+          speechEvents.on('speaking', function() {
+            console.log('speaking');
+          });
+       
+          speechEvents.on('stopped_speaking', function() {
+            console.log('stopped_speaking');
+          });
+
+          audiolinein.onloadedmetadata = function(e) {              
+              audiolinein.play();              
           };
-  
+          // audiolinein.play();
           // Create a MediaStreamAudioSourceNode
           // Feed the HTMLMediaElement into it
           // var audioCtx = new AudioContext();
-          var source = audioCtx.createMediaStreamSource(stream);
-  
-          // Create a biquadfilter
+          // var audioCtx = new AudioContext();
+          var source = context.createMediaStreamSource(stream);
+          // var source = context.createMediaStreamSource(stream);
+          var audiostream=source.mediastream;
+          source.connect(analyser);
+          analyser.connect(context.destination);
+          
+          this.equaliserrun()
+            // Create a biquadfilter
           // var biquadFilter = audioCtx.createBiquadFilter();
           // biquadFilter.type = "lowshelf";
           // biquadFilter.frequency.value = 1000;
@@ -65,26 +89,23 @@ class App extends React.Component {
     }
     
 
-  widthMerge=(e)=>{
-    console.log('old state',this.state) 
+  widthMerge=(e)=>{   
     this.props.mergecanvaswidth(e)
   }     
 
   playsoundfromfile=(e)=>{
-    var soundfromfile=this.props.audionodefromfile
-    console.log(this.props.playpausestate)
-    if (this.props.playpausestate==false) {
-      console.log('+++++')
+    var soundfromfile=this.props.audionodefromfile    
+    if (this.props.playpausestate==false) {     
       soundfromfile.play();
       this.equaliserrun()
       this.props.playpausesoundfromfile()
-    } else {     
-      console.log('-----') 
+    } else {      
       soundfromfile.pause();
       this.props.playpausesoundfromfile();
   }}
 
-  equaliserrun(){
+  equaliserrun=(e)=>{
+   
     var ctx = document.querySelector("canvas").getContext("2d");
     var flagColorColumn=true;
     var analyser=this.props.analyser
@@ -92,6 +113,7 @@ class App extends React.Component {
     var heightArray = new Uint8Array(numPoints);
     function render() {
       analyser.getByteFrequencyData(heightArray);
+      
       var width = ctx.canvas.width;
       var height = ctx.canvas.height;
       var countcolumns=Math.floor(ctx.canvas.width/52);
@@ -127,11 +149,11 @@ class App extends React.Component {
     
   }
 
-  createbaseaudiocontextandanaliser(){
-    var context = new (window.AudioContext || window.webkitAudioContext)();    
-    var analyser = context.createAnalyser();
-    this.props.baseaudiocontextandanaliser({context,analyser})
-  }
+  // createbaseaudiocontextandanaliser(){
+  //   var context = new (window.AudioContext || window.webkitAudioContext)();    
+  //   var analyser = context.createAnalyser();
+  //   this.props.baseaudiocontextandanaliser({context,analyser})
+  // }
 
   uploadsoundinfofromfile=(e)=>{  
     const file=e.target.files[0]
@@ -157,10 +179,8 @@ class App extends React.Component {
       }
   
 
-  render(){
-    
-  return (
-    
+  render(){    
+  return (    
     <div className="App">
       <Equaliser width={this.props.widthCanvas} height="200" onchange={this.widthMerge} hadlesound={this.playsoundfromfile}/>
       <Uploadbutton handleinfofromsound={this.uploadsoundinfofromfile}/>
@@ -174,7 +194,7 @@ function mapstate(state){
 }
 function storedispatch(dispatch){
   return {
-      baseaudiocontextandanaliser: (data)=>dispatch({type: 'baseaudiocontextandanaliser', payload: data}),
+      // baseaudiocontextandanaliser: (data)=>dispatch({type: 'baseaudiocontextandanaliser', payload: data}),
       createaudiodata: (data)=>dispatch({type: 'createaudiodata', payload: data}),  
       playpausesoundfromfile: ()=>dispatch({type: 'playpausesoundfromfile'}),
       mergecanvaswidth: (e)=>dispatch({type:'mergecanvaswidth', payload: e.target.value})   
