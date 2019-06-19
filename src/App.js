@@ -82,7 +82,6 @@ class App extends React.Component {
       this.props.startmutestreamaudio()
     } else { 
       sourcestream.disconnect(analyser);
-      // analyser.disconnect(context.destination)
       audionstream.pause();
       this.props.startmutestreamaudio();
   }
