@@ -28,34 +28,38 @@ class App extends React.Component {
     var context = this.props.audiocontext;
     
     var analyser=this.props.analyser;        
-    var audiolinein = new Audio(); 
+    var audiolinein = new Audio();
+    // audiolinein.autostart="false"
+    audiolinein.muted = "muted"
+    audiolinein.autostart="0" 
 
     if (navigator.mediaDevices) {      
       navigator.mediaDevices.getUserMedia ({audio: true})      
       .then((stream)=> {   
         audiolinein.srcObject = stream;
+        audiolinein.muted=true;
+        
           //hark
           var options = {};
           var speechEvents = Hark(stream, options);
+          var htmlinfo=document.getElementById("stream_detecting")
       
           speechEvents.on('speaking', function() {
             console.log('speaking');
+            htmlinfo.innerHTML=`speaking`
           });
        
           speechEvents.on('stopped_speaking', function() {
             console.log('stopped_speaking');
+            htmlinfo.innerHTML=`no stream detekting`
           });
 
-          // audiolinein.onloadedmetadata = function(e) {              
-          //     audiolinein.play();              
-          // };
-          var source = context.createMediaStreamSource(stream);
-          
-          source.connect(analyser);
-          analyser.connect(context.destination);
-          
-          // this.equaliserrun() 
-          this.props.createstreamdata(audiolinein)          
+          var sourcestream = context.createMediaStreamSource(stream);
+         
+          // sourcestream.connect(analyser);
+          // analyser.connect(context.destination);
+                    
+          this.props.createstreamdata({audiolinein,stream,sourcestream})          
       })
       .catch(function(err) {
           console.log('The following gUM error occured: ' + err);
@@ -88,15 +92,23 @@ class App extends React.Component {
   }}
 
   startmutestream =()=>{    
-    var stream=this.props.audiostream;   
+    var audionstream=this.props.audiostream; 
+    var context=this.props.audiocontext;
+    var analyser=this.props.analyser  
+    var sourcestream=this.props.sourcestream
+          
     if (this.props.startmutesstate==false) {  
-      console.log('start!')   
-      stream.play();
+      console.log('start!') 
+      sourcestream.connect(analyser);
+      analyser.connect(context.destination);  
+      audionstream.play();
       this.equaliserrun()
       this.props.startmutestreamaudio()
     } else {      
       console.log('pause!')
-      stream.pause();
+      sourcestream.disconnect(analyser);
+      analyser.disconnect(context.destination)
+      audionstream.pause();
       this.props.startmutestreamaudio();
   }
   }
@@ -179,7 +191,7 @@ class App extends React.Component {
     console.log('render')   
   return (    
     <div className="App">      
-      <Streambutton onclickhandler={this.startmutestream} />
+      <Streambutton onclickhandler={this.startmutestream} /><span id="stream_detecting"></span>
       <Equaliser width={this.props.widthCanvas} height="200" onchange={this.widthMerge} hadlesound={this.playsoundfromfile}/>
       <Uploadbutton handleinfofromsound={this.uploadsoundinfofromfile}/>
       <Infoabouttrack trackname={this.props.trackname} tracksize={this.props.tracksize} tracktype={this.props.tracktype} />

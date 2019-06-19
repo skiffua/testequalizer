@@ -16,6 +16,7 @@ const initialState={
      analyser: analyser,
      audiofromfile: "",
      audiostream: "",
+     sourcestream: "",
      audionodefromfile: "",
      playpausestate: false,
      startmutesstate: false
@@ -52,7 +53,8 @@ export default function rootReducer(state=initialState, action){
         case 'createstreamdata':
             return {
                 ...state,
-                audiostream: action.payload
+                audiostream: action.payload.audiolinein,
+                sourcestream: action.payload.sourcestream
                 }      
         case 'startmutestteam':
                 return {
