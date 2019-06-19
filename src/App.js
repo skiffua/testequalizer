@@ -15,30 +15,28 @@ import Hark from 'hark'
 
 
 class App extends React.Component {  
- 
-
-  componentWillMount(){
-    //  this.createbaseaudiocontextandanaliser()
-  }
-
+   componentDidMount(){ 
+      this.detectstreamsoundfrommicrophon();
+    }
+    
+  // createbaseaudiocontextandanaliser=()=>{
+  //   var context = new (window.AudioContext || window.webkitAudioContext)();    
+  //   var analyser = context.createAnalyser();
+  //   this.props.baseaudiocontextandanaliser({context,analyser})
+  // }
   
-
-  componentDidMount(){ 
-    
-    var context = this.props.audiocontext;
-    
+  detectstreamsoundfrommicrophon=()=>{    
+    var context = this.props.audiocontext;    
     var analyser=this.props.analyser;        
     var audiolinein = new Audio();
     // audiolinein.autostart="false"
     audiolinein.muted = "muted"
     audiolinein.autostart="0" 
-
     if (navigator.mediaDevices) {      
       navigator.mediaDevices.getUserMedia ({audio: true})      
       .then((stream)=> {   
         audiolinein.srcObject = stream;
-        audiolinein.muted=true;
-        
+        audiolinein.muted=true;        
           //hark
           var options = {};
           var speechEvents = Hark(stream, options);
@@ -53,29 +51,17 @@ class App extends React.Component {
             console.log('stopped_speaking');
             htmlinfo.innerHTML=`no stream detekting`
           });
-
-          var sourcestream = context.createMediaStreamSource(stream);
-         
-          // sourcestream.connect(analyser);
-          // analyser.connect(context.destination);
-                    
-          this.props.createstreamdata({audiolinein,stream,sourcestream})          
+          var sourcestream = context.createMediaStreamSource(stream);                           
+          this.props.createstreamdata({audiolinein,sourcestream})          
       })
       .catch(function(err) {
           console.log('The following gUM error occured: ' + err);
       });
   } else {
      console.log('getUserMedia not supported on your browser!');
-  }
-  console.log('')
-    }
-    
-  createbaseaudiocontextandanaliser=()=>{
-    var context = new (window.AudioContext || window.webkitAudioContext)();    
-    var analyser = context.createAnalyser();
-    this.props.baseaudiocontextandanaliser({context,analyser})
-  }
-  
+  }  
+  }  
+
   widthMerge=(e)=>{   
     this.props.mergecanvaswidth(e)
   }     
@@ -100,7 +86,8 @@ class App extends React.Component {
     if (this.props.startmutesstate==false) {  
       console.log('start!') 
       sourcestream.connect(analyser);
-      analyser.connect(context.destination);  
+      analyser.connect(context.destination); 
+      //play/pause function doesn't work 
       audionstream.play();
       this.equaliserrun()
       this.props.startmutestreamaudio()
@@ -113,10 +100,8 @@ class App extends React.Component {
   }
   }
 
-  equaliserrun=(e)=>{
-   
+  equaliserrun=(e)=>{   
     var ctx = document.querySelector("canvas").getContext("2d");
-
     // var ctx=this.props.graphiccontext;
     var flagColorColumn=true;
     var analyser=this.props.analyser
@@ -159,9 +144,7 @@ class App extends React.Component {
       ctx.fill();      
     } 
     
-  }
-
-  
+  } 
 
   uploadsoundinfofromfile=(e)=>{  
     const file=e.target.files[0]
@@ -184,8 +167,7 @@ class App extends React.Component {
         });
         audio.src = URL.createObjectURL(file)
         this.props.createaudiodata({audio,file,name:file.name,size: file.size, type:file.type})   
-      }
-  
+      }  
 
   render(){   
     console.log('render')   

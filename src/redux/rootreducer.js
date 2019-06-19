@@ -1,14 +1,11 @@
 var context = new (window.AudioContext || window.webkitAudioContext)();    
 var analyser = context.createAnalyser();
 
-// var ctx = document.querySelector("canvas").getContext("2d");
 
 const initialState={  
     //graphic canvas 
-    widthCanvas: 400,
-    // graphiccontext: ctx, 
-     
-     //audiostates
+    widthCanvas: 400, 
+    //audiostates
      trackname: "",     
      tracktype: "",
      tracksize: "",     
@@ -40,8 +37,7 @@ export default function rootReducer(state=initialState, action){
                 ...state,
                 trackname: action.payload.name,
                 tracktype: action.payload.type,
-                tracksize: action.payload.size,
-                // soundSrc: action.payload.file,                
+                tracksize: action.payload.size,                
                 audiofromfile: action.payload.file,
                 audionodefromfile: action.payload.audio
                     } 
