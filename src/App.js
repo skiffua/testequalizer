@@ -1,18 +1,14 @@
 import React from 'react';
-import Equaliser from './equalizer/equalizer'
-import Uploadbutton from './upload/uploadbutton'
-import Infoabouttrack from './upload/infoaboutfile/infoaboutuploadfile'
-import Streambutton from './streambutton/streambutton'
+import Hark from 'hark'
+import Equaliser from './equaliser/equaliser'
+import PlayButton from './equaliser/playbutton'
+import Uploadbutton from './equaliser/upload/uploadbutton'
+import Infoabouttrack from './equaliser/upload/infoaboutfile/infoaboutuploadfile'
+import Streambutton from './equaliser/streambutton/streambutton'
 import {connect} from 'react-redux'
 
 // import logo from './logo.svg';
 import './App.css';
-
-//hark
-import Hark from 'hark'
-
-
-
 
 class App extends React.Component {  
    componentDidMount(){ 
@@ -26,12 +22,8 @@ class App extends React.Component {
   // }
   
   detectstreamsoundfrommicrophon=()=>{    
-    var context = this.props.audiocontext;    
-    var analyser=this.props.analyser;        
-    var audiolinein = new Audio();
-    // audiolinein.autostart="false"
-    audiolinein.muted = "muted"
-    audiolinein.autostart="0" 
+    var context = this.props.audiocontext;          
+    var audiolinein = new Audio();   
     if (navigator.mediaDevices) {      
       navigator.mediaDevices.getUserMedia ({audio: true})      
       .then((stream)=> {   
@@ -42,13 +34,11 @@ class App extends React.Component {
           var speechEvents = Hark(stream, options);
           var htmlinfo=document.getElementById("stream_detecting")
       
-          speechEvents.on('speaking', function() {
-            console.log('speaking');
+          speechEvents.on('speaking', function() {           
             htmlinfo.innerHTML=`speaking`
           });
        
           speechEvents.on('stopped_speaking', function() {
-            console.log('stopped_speaking');
             htmlinfo.innerHTML=`no stream detekting`
           });
           var sourcestream = context.createMediaStreamSource(stream);                           
@@ -68,7 +58,7 @@ class App extends React.Component {
 
   playsoundfromfile=(e)=>{
     var soundfromfile=this.props.audionodefromfile    
-    if (this.props.playpausestate==false) {     
+    if (this.props.playpausestate===false) {     
       soundfromfile.play();
       this.equaliserrun()
       this.props.playpausesoundfromfile()
@@ -83,18 +73,16 @@ class App extends React.Component {
     var analyser=this.props.analyser  
     var sourcestream=this.props.sourcestream
           
-    if (this.props.startmutesstate==false) {  
-      console.log('start!') 
+    if (this.props.startmutesstate===false) { 
       sourcestream.connect(analyser);
       analyser.connect(context.destination); 
       //play/pause function doesn't work 
       audionstream.play();
       this.equaliserrun()
       this.props.startmutestreamaudio()
-    } else {      
-      console.log('pause!')
+    } else { 
       sourcestream.disconnect(analyser);
-      analyser.disconnect(context.destination)
+      // analyser.disconnect(context.destination)
       audionstream.pause();
       this.props.startmutestreamaudio();
   }
@@ -170,11 +158,11 @@ class App extends React.Component {
       }  
 
   render(){   
-    console.log('render')   
   return (    
     <div className="App">      
       <Streambutton onclickhandler={this.startmutestream} /><span id="stream_detecting"></span>
-      <Equaliser width={this.props.widthCanvas} height="200" onchange={this.widthMerge} hadlesound={this.playsoundfromfile}/>
+      <PlayButton hadlesound={this.playsoundfromfile}/>
+      <Equaliser width={this.props.widthCanvas} height="200" onchange={this.widthMerge}/>
       <Uploadbutton handleinfofromsound={this.uploadsoundinfofromfile}/>
       <Infoabouttrack trackname={this.props.trackname} tracksize={this.props.tracksize} tracktype={this.props.tracktype} />
     </div>

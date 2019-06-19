@@ -1,5 +1,4 @@
 import React from 'react'
-import getinfoaboutfile from './infoaboutfile/getinfoaboutfile'
 import {connect} from 'react-redux'
 
 

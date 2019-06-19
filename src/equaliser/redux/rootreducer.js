@@ -63,6 +63,5 @@ export default function rootReducer(state=initialState, action){
                 widthCanvas: action.payload
             }          
         default: return state
-    }   
-    return state 
+    }  
 }

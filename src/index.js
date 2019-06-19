@@ -5,7 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {createStore} from 'redux'
 import {Provider} from 'react-redux'
-import rootReducer from './redux/rootreducer' 
+import rootReducer from './equaliser/redux/rootreducer' 
 
 const store=createStore(rootReducer)
 store.subscribe(()=>console.log('state',store.getState()))
